@@ -53,7 +53,7 @@ class TodoListState extends State<TodoList> {
                 ),
 
                 new FlatButton(
-                    child: new Text('MARK AS DONE'),
+                    child: new Text('DONE'),
                     onPressed: (){
                       _removeTodoItem(index);
                       Navigator.of(context).pop();
