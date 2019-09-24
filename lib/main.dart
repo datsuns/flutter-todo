@@ -19,6 +19,18 @@ class TodoList extends StatefulWidget {
 }
 
 class TodoListState extends State<TodoList> {
+  List<String> _todoItems = [];
+
+  // This will be called each time the + button is pressed
+  void _addTodoItem() {
+    // Putting our code inside "setState" tells the app that our state has changed,
+    // and it will automatically re-render the list
+    setState( (){
+      int index = _todoItems.length;
+      _todoItems.add('Item ' + index.toString());
+      } );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
