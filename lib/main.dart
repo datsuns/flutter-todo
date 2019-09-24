@@ -26,6 +26,8 @@ class TodoListState extends State<TodoList> {
     // Putting our code inside "setState" tells the app that our state has changed,
     // and it will automatically re-render the list
     //             ^^^^^^^^^^^^^^^^^^^^^^^
+    // ==> calling setState() to invoke TodoList.createState(),
+    //     and that cause re-render
     setState( (){
       int index = _todoItems.length;
       _todoItems.add('Item ' + index.toString());
