@@ -56,9 +56,13 @@ class TodoListState extends State<TodoList> {
 
   // Much like _addTodoItem, this modifies the array of todo strings and
   // notifies the app that the state has changed by using setState
-  void _removeTodoItem(int index){
+  void _removeTodoItem(int index) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String target = _todoItems[index];
     setState( () => _todoItems.removeAt(index));
+    await prefs.remove(target);
   }
+
 
   void _promptRemoveTodoItem(int index){
     showDialog(
