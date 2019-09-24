@@ -17,15 +17,18 @@ class TodoApp extends StatelessWidget {
 }
 
 class ToDoItem {
-  String   body;
-  DateTime key;
+  String _title;
+  String _body;
+  String _saveKey;
 
   ToDoItem(String text) {
-    this.body = text;
+    this._title = text;
+    this._body = "";
+    this._saveKey  = DateTime.now().toString();
   }
 
-  String get(){
-    return this.body;
+  String title(){
+    return this._title;
   }
 }
 
@@ -73,7 +76,7 @@ class TodoListState extends State<TodoList> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var target = _todoItems[index];
     setState( () => _todoItems.removeAt(index));
-    await prefs.remove(target.get());
+    await prefs.remove(target.title());
   }
 
 
@@ -113,7 +116,7 @@ class TodoListState extends State<TodoList> {
       // ignore: missing_return
       itemBuilder: (context, index) {
         if(index < _todoItems.length){
-          return _buildTodoItem(_todoItems[index].get(), index);
+          return _buildTodoItem(_todoItems[index].title(), index);
         }
       },
     );
