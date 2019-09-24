@@ -49,14 +49,13 @@ class TodoListState extends State<TodoList> {
   void _loadSavedData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     for(var key in prefs.getKeys()){
-      await _todoItems.add(new ToDoItem(prefs.getString(key)));
+      _todoItems.add(new ToDoItem(prefs.getString(key)));
     }
   }
 
   // Instead of auto generating a todo item, _addTodoItem now accepts a string
-  void _addTodoItem(String task) {
-    developer.log('hello');
-    //SharedPreferences prefs = await SharedPreferences.getInstance();
+  void _addTodoItem(String task) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     // Putting our code inside "setState" tells the app that our state has changed,
     // and it will automatically re-render the list
     //             ^^^^^^^^^^^^^^^^^^^^^^^
@@ -65,7 +64,7 @@ class TodoListState extends State<TodoList> {
     if( task.length > 0 ){
       setState( () {
         _todoItems.add(new ToDoItem(task));
-        //prefs.setString(task, task);
+        prefs.setString(task, task);
       });
     }
   }
@@ -148,34 +147,40 @@ class TodoListState extends State<TodoList> {
     );
   }
 
+  // MaterialPageRoute will automatically animate the screen entry,
+  // as well as adding a back button to close it
+  MaterialPageRoute _generateTaskAddView(BuildContext context) {
+    var page = new MaterialPageRoute(
+          builder: (context) {
+            return new Scaffold(
+              appBar: new AppBar(
+                  title: new Text('Add new Task')
+              ),
+
+              body: new TextField(
+                autofocus: true,
+                onSubmitted: (val) async {
+                  final SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.setString(val, val);
+                  _addTodoItem(val);
+                  Navigator.pop(context); // Close the add todo screen
+                },
+                decoration: new InputDecoration(
+                    hintText: 'Enter something todo ...',
+                    contentPadding: const EdgeInsets.all(16.0)
+                ),
+              ),
+            );
+          }
+        );
+    return page;
+  }
+
   void _pushAddTodoScreen() {
     // Push this page onto the stack
     Navigator.of(context).push(
-      // MaterialPageRoute will automatically animate the screen entry,
-      // as well as adding a back button to close it
-        new MaterialPageRoute(
-            builder: (BuildContext context) {
-              return new Scaffold(
-                appBar: new AppBar(
-                    title: new Text('Add new Task')
-                ),
-
-                body: new TextField(
-                  autofocus: true,
-                  onSubmitted: (val) async {
-                    final SharedPreferences prefs = await SharedPreferences.getInstance();
-                    prefs.setString(val, val);
-                    _addTodoItem(val);
-                    Navigator.pop(context); // Close the add todo screen
-                  },
-                  decoration: new InputDecoration(
-                      hintText: 'Enter something todo ...',
-                      contentPadding: const EdgeInsets.all(16.0)
-                  ),
-                ),
-              );
-            }
-        )
+      _generateTaskAddView(context)
     );
   }
+
 }
