@@ -133,7 +133,7 @@ class TodoListState extends State<TodoList> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-          title: new Text('日本語？')
+          title: new Text('ToDo List')
       ),
 
       body: _buildTodoList(),
@@ -148,19 +148,48 @@ class TodoListState extends State<TodoList> {
   }
 
   Widget _generateTaskAddInput(BuildContext context) {
-    return new TextField(
-      autofocus: true,
-      onSubmitted: (val) async {
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString(val, val);
-        _addTodoItem(val);
-        Navigator.pop(context); // Close the add todo screen
-      },
-      decoration: new InputDecoration(
-          hintText: 'Enter something todo ...',
-          contentPadding: const EdgeInsets.all(16.0)
+    return new Scaffold(
+      body: new TextField(
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
+
+        onSubmitted: (val) async {
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString(val, val);
+          _addTodoItem(val);
+          Navigator.pop(context); // Close the add todo screen
+        },
+
+        decoration: new InputDecoration(
+            hintText: 'Enter something todo ...',
+            contentPadding: const EdgeInsets.all(16.0)
+        ),
+      ),
+
+      floatingActionButton: new FloatingActionButton(
+          //onPressed: _pushAddTodoScreen,
+          tooltip: 'Add task',
+          child: new Icon(Icons.add)
       ),
     );
+    //return new TextField(
+    //  autofocus: true,
+
+    //  keyboardType: TextInputType.multiline,
+    //  maxLines: null,
+
+    //  onSubmitted: (val) async {
+    //    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //    prefs.setString(val, val);
+    //    _addTodoItem(val);
+    //    Navigator.pop(context); // Close the add todo screen
+    //  },
+
+    //  decoration: new InputDecoration(
+    //      hintText: 'Enter something todo ...',
+    //      contentPadding: const EdgeInsets.all(16.0)
+    //  ),
+    //);
   }
 
   // MaterialPageRoute will automatically animate the screen entry,
