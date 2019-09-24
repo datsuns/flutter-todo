@@ -153,11 +153,14 @@ class TodoListState extends State<TodoList> {
         keyboardType: TextInputType.multiline,
         maxLines: null,
 
-        onSubmitted: (val) async {
-          final SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString(val, val);
-          _addTodoItem(val);
-          Navigator.pop(context); // Close the add todo screen
+        // TODO TextEditingController may keep input text ??
+        //controller: , // wants to add instance
+
+        onEditingComplete: () {
+          //final SharedPreferences prefs = await SharedPreferences.getInstance();
+          //prefs.setString(val, val);
+          //_addTodoItem(val);
+          //Navigator.pop(context); // Close the add todo screen
         },
 
         decoration: new InputDecoration(
@@ -167,7 +170,9 @@ class TodoListState extends State<TodoList> {
       ),
 
       floatingActionButton: new FloatingActionButton(
-          //onPressed: _pushAddTodoScreen,
+          onPressed: (){
+            Navigator.pop(context); // Close the add todo screen
+          },
           tooltip: 'Add task',
           child: new Icon(Icons.add)
       ),
