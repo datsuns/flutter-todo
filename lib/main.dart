@@ -33,6 +33,38 @@ class TodoListState extends State<TodoList> {
     }
   }
 
+  // Much like _addTodoItem, this modifies the array of todo strings and
+  // notifies the app that the state has changed by using setState
+  void _removeTodoItem(int index){
+    setState( () => _todoItems.removeAt(index));
+  }
+
+  void _promptRemoveTodoItem(int index){
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return new AlertDialog(
+              title: new Text('Mark "${_todoItems[index]}" ad done?'),
+
+              actions: <Widget>[
+                new FlatButton(
+                    child: new Text('CANCEL'),
+                    onPressed: () => Navigator.of(context).pop()
+                ),
+
+                new FlatButton(
+                    child: new Text('MARK AS DONE'),
+                    onPressed: (){
+                      _removeTodoItem(index);
+                      Navigator.of(context).pop();
+                    }
+                ),
+              ]
+          );
+        }
+    );
+  }
+
   // Build the whole list of todo items
   Widget _buildTodoList() {
     return new ListView.builder(
@@ -42,16 +74,17 @@ class TodoListState extends State<TodoList> {
         // So, we need to check the index is OK.
         itemBuilder: (context, index) {
           if(index < _todoItems.length){
-            return _buildTodoItem(_todoItems[index]);
+            return _buildTodoItem(_todoItems[index], index);
           }
         },
     );
   }
 
   // Build a single todo item
-  Widget _buildTodoItem(String todoText){
+  Widget _buildTodoItem(String todoText, int index){
     return new ListTile(
-        title: new Text(todoText)
+        title: new Text(todoText),
+        onTap: () => _promptRemoveTodoItem(index)
     );
   }
 
@@ -79,7 +112,7 @@ class TodoListState extends State<TodoList> {
         // MaterialPageRoute will automatically animate the screen entry,
         // as well as adding a back button to close it
         new MaterialPageRoute(
-            builder: (context) {
+            builder: (BuildContext context) {
               return new Scaffold(
                   appBar: new AppBar(
                       title: new Text('Add new Task')
