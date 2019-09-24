@@ -31,6 +31,28 @@ class TodoListState extends State<TodoList> {
       } );
   }
 
+  // Build the whole list of todo items
+  Widget _buildTodoList() {
+    return new ListView.builder(
+        // itemBuilder will be automatically be called as many times as it takes 
+        // for the list to fill up its available space, which is most likely 
+        // more than the number of todo items we have.
+        // So, we need to check the index is OK.
+        itemBuilder: (context, index) {
+          if(index < _todoItems.length){
+            return _buildTodoItem(_todoItems[index]);
+          }
+        },
+    );
+  }
+
+  // Build a single todo item
+  Widget _buildTodoItem(String todoText){
+    return new ListTile(
+        title: new Text(todoText)
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
