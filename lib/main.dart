@@ -92,13 +92,13 @@ class TodoListState extends State<TodoList> {
                         Navigator.pop(context); // Close the add todo screen
                       },
                       decoration: new InputDecoration(
-                        hintText: 'Enter something todo ...',
-                        contentPadding: const EdgeInsets.all(16.0)
-                      ),
+                                      hintText: 'Enter something todo ...',
+                                      contentPadding: const EdgeInsets.all(16.0)
+                                  ),
                   ),
               );
             }
         )
-    );
+            );
   }
 }
