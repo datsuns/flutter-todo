@@ -21,17 +21,16 @@ class TodoList extends StatefulWidget {
 class TodoListState extends State<TodoList> {
   List<String> _todoItems = [];
 
-  // This will be called each time the + button is pressed
-  void _addTodoItem() {
+  // Instead of autogenerating a todo item, _addTodoItem now accepts a string
+  void _addTodoItem(String task) {
     // Putting our code inside "setState" tells the app that our state has changed,
     // and it will automatically re-render the list
     //             ^^^^^^^^^^^^^^^^^^^^^^^
     // ==> calling setState() to invoke TodoList.createState(),
     //     and that cause re-render
-    setState( (){
-      int index = _todoItems.length;
-      _todoItems.add('Item ' + index.toString());
-      } );
+    if( task.length > 0 ){
+      setState( () => _todoItems.add(task));
+    }
   }
 
   // Build the whole list of todo items
@@ -66,10 +65,40 @@ class TodoListState extends State<TodoList> {
       body: _buildTodoList(),
 
       floatingActionButton: new FloatingActionButton(
-          onPressed: _addTodoItem,
+          // pressing this button now opens the new screen
+          onPressed: _pushAddTodoScreen,
           tooltip: 'Add task',
           child: new Icon(Icons.add)
       ),
+    );
+  }
+
+  void _pushAddTodoScreen() {
+    // Push this page onto the stack
+    Navigator.of(context).push(
+        // MaterialPageRoute will automatically animate the screen entry,
+        // as well as adding a back button to close it
+        new MaterialPageRoute(
+            builder: (context) {
+              return new Scaffold(
+                  appBar: new AppBar(
+                      title: new Text('Add new Task')
+                  ),
+
+                  body: new TextField(
+                      autofocus: true,
+                      onSubmitted: (val) {
+                        _addTodoItem(val);
+                        Navigator.pop(context); // Close the add todo screen
+                      },
+                      decoration: new InputDecoration(
+                        hintText: 'Enter something todo ...',
+                        contentPadding: const EdgeInsets.all(16.0)
+                      ),
+                  ),
+              );
+            }
+        )
     );
   }
 }
