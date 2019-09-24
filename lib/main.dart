@@ -58,7 +58,15 @@ class TodoListState extends State<TodoList> {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Todo List')
-      )
+      ),
+
+      body: _buildTodoList(),
+
+      floatingActionButton: new FloatingActionButton(
+          onPressed: _addTodoItem,
+          tooltip: 'Add task',
+          child: new Icon(Icons.add)
+      ),
     );
   }
 }
