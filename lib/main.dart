@@ -1,7 +1,8 @@
 // Import MaterialApp and other widgets which we can use to quickly create a material app
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:developer';
+import 'dart:developer' as developer;
+import 'dart:core';
 
 void main() => runApp(new TodoApp());
 
@@ -15,40 +16,52 @@ class TodoApp extends StatelessWidget {
   }
 }
 
+class ToDoItem {
+  String   body;
+  DateTime key;
+
+  ToDoItem(String text) {
+    this.body = text;
+  }
+
+  String get(){
+    return this.body;
+  }
+}
+
 class TodoList extends StatefulWidget {
   @override
   createState() => new TodoListState();
 }
 
 class TodoListState extends State<TodoList> {
-  List<String> _todoItems = [];
+  List<ToDoItem> _todoItems = [];
 
   @override
   void initState() {
     super.initState();
     _loadSavedData();
-    log('init');
   }
 
   void _loadSavedData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     for(var key in prefs.getKeys()){
-      await _todoItems.add(prefs.getString(key));
+      await _todoItems.add(new ToDoItem(prefs.getString(key)));
     }
   }
 
-  // Instead of autogenerating a todo item, _addTodoItem now accepts a string
+  // Instead of auto generating a todo item, _addTodoItem now accepts a string
   void _addTodoItem(String task) {
+    developer.log('hello');
     //SharedPreferences prefs = await SharedPreferences.getInstance();
     // Putting our code inside "setState" tells the app that our state has changed,
     // and it will automatically re-render the list
     //             ^^^^^^^^^^^^^^^^^^^^^^^
     // ==> calling setState() to invoke TodoList.createState(),
     //     and that cause re-render
-    //debugPrint('add task ${task}');
     if( task.length > 0 ){
       setState( () {
-        _todoItems.add(task);
+        _todoItems.add(new ToDoItem(task));
         //prefs.setString(task, task);
       });
     }
@@ -58,9 +71,9 @@ class TodoListState extends State<TodoList> {
   // notifies the app that the state has changed by using setState
   void _removeTodoItem(int index) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String target = _todoItems[index];
+    var target = _todoItems[index];
     setState( () => _todoItems.removeAt(index));
-    await prefs.remove(target);
+    await prefs.remove(target.get());
   }
 
 
@@ -100,7 +113,7 @@ class TodoListState extends State<TodoList> {
       // ignore: missing_return
       itemBuilder: (context, index) {
         if(index < _todoItems.length){
-          return _buildTodoItem(_todoItems[index], index);
+          return _buildTodoItem(_todoItems[index].get(), index);
         }
       },
     );
@@ -118,7 +131,7 @@ class TodoListState extends State<TodoList> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-          title: new Text('Todo List')
+          title: new Text('日本語？')
       ),
 
       body: _buildTodoList(),
