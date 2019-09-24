@@ -147,6 +147,22 @@ class TodoListState extends State<TodoList> {
     );
   }
 
+  Widget _generateTaskAddInput(BuildContext context) {
+    return new TextField(
+      autofocus: true,
+      onSubmitted: (val) async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString(val, val);
+        _addTodoItem(val);
+        Navigator.pop(context); // Close the add todo screen
+      },
+      decoration: new InputDecoration(
+          hintText: 'Enter something todo ...',
+          contentPadding: const EdgeInsets.all(16.0)
+      ),
+    );
+  }
+
   // MaterialPageRoute will automatically animate the screen entry,
   // as well as adding a back button to close it
   MaterialPageRoute _generateTaskAddView(BuildContext context) {
@@ -156,20 +172,7 @@ class TodoListState extends State<TodoList> {
               appBar: new AppBar(
                   title: new Text('Add new Task')
               ),
-
-              body: new TextField(
-                autofocus: true,
-                onSubmitted: (val) async {
-                  final SharedPreferences prefs = await SharedPreferences.getInstance();
-                  prefs.setString(val, val);
-                  _addTodoItem(val);
-                  Navigator.pop(context); // Close the add todo screen
-                },
-                decoration: new InputDecoration(
-                    hintText: 'Enter something todo ...',
-                    contentPadding: const EdgeInsets.all(16.0)
-                ),
-              ),
+              body: _generateTaskAddInput(context),
             );
           }
         );
