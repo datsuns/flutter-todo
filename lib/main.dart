@@ -163,16 +163,6 @@ class TodoListState extends State<TodoList> {
         keyboardType: TextInputType.multiline,
         maxLines: null,
 
-        // TODO TextEditingController may keep input text ??
-        //controller: , // wants to add instance
-
-        onEditingComplete: () {
-          //final SharedPreferences prefs = await SharedPreferences.getInstance();
-          //prefs.setString(val, val);
-          //_addTodoItem(val);
-          //Navigator.pop(context); // Close the add todo screen
-        },
-
         onChanged: (text) {
           this.latestInput = text;
         },
@@ -192,24 +182,6 @@ class TodoListState extends State<TodoList> {
           child: new Icon(Icons.add)
       ),
     );
-    //return new TextField(
-    //  autofocus: true,
-
-    //  keyboardType: TextInputType.multiline,
-    //  maxLines: null,
-
-    //  onSubmitted: (val) async {
-    //    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    //    prefs.setString(val, val);
-    //    _addTodoItem(val);
-    //    Navigator.pop(context); // Close the add todo screen
-    //  },
-
-    //  decoration: new InputDecoration(
-    //      hintText: 'Enter something todo ...',
-    //      contentPadding: const EdgeInsets.all(16.0)
-    //  ),
-    //);
   }
 
   // MaterialPageRoute will automatically animate the screen entry,
