@@ -22,13 +22,21 @@ class ToDoItem {
   String _saveKey;
 
   ToDoItem(String text) {
-    this._title = text;
-    this._body = "";
+    this._body = text;
+    this._title = text.split('\n')[0];
     this._saveKey  = DateTime.now().toString();
   }
 
   String title(){
     return this._title;
+  }
+
+  String body(){
+    return this._body;
+  }
+
+  String key(){
+    return this._saveKey;
   }
 }
 
@@ -39,6 +47,7 @@ class TodoList extends StatefulWidget {
 
 class TodoListState extends State<TodoList> {
   List<ToDoItem> _todoItems = [];
+  String latestInput = '';
 
   @override
   void initState() {
@@ -63,8 +72,9 @@ class TodoListState extends State<TodoList> {
     //     and that cause re-render
     if( task.length > 0 ){
       setState( () {
-        _todoItems.add(new ToDoItem(task));
-        prefs.setString(task, task);
+        var item = new ToDoItem(task);
+        _todoItems.add(item);
+        prefs.setString(item.key(), item.body());
       });
     }
   }
@@ -163,6 +173,10 @@ class TodoListState extends State<TodoList> {
           //Navigator.pop(context); // Close the add todo screen
         },
 
+        onChanged: (text) {
+          this.latestInput = text;
+        },
+
         decoration: new InputDecoration(
             hintText: 'Enter something todo ...',
             contentPadding: const EdgeInsets.all(16.0)
@@ -172,6 +186,7 @@ class TodoListState extends State<TodoList> {
       floatingActionButton: new FloatingActionButton(
           onPressed: (){
             Navigator.pop(context); // Close the add todo screen
+            _addTodoItem(this.latestInput);
           },
           tooltip: 'Add task',
           child: new Icon(Icons.add)
